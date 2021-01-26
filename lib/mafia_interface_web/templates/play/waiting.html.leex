@@ -1,0 +1,76 @@
+<%= if @name == nil do %>
+	<div class="row u-center">
+		
+		<form phx-submit="set_name">
+
+			<input autofocus type="text" name="name" placeholder="Choose name"/>
+
+			<input type="submit" class="button-primary" value="Set"/>
+
+		</form>
+
+	</div>
+<% else %>
+	<div class="row">
+
+		<div class="two-thirds column">
+			<h3><strong><%= @name %></strong></h3>
+		</div>
+
+		<div class="one-third column">
+			<button class="button-primary u-pull-right" phx-click="start_game">Start</button>
+		</div>
+
+	</div>
+<% end %>
+
+<div class="row">
+
+	<div class="one-third column">
+
+		<h5>Players:</h5>
+		<ul>
+			<%= for {name, _info} <- @players do%>
+				<li><%= name %></li>
+			<% end %>
+		</ul>
+
+	</div>
+
+	<div class="two-thirds column">
+
+		<form phx-submit="set_name">
+			<div class="row shaded">
+
+				<div class="nine columns">
+					<span class="textarea" role="textbox" name="msg" contenteditable></span>
+				</div>
+
+				<div class="three columns">
+					<input class="u-pull-right u-no-margin" type="submit" value="Send"/>
+				</div>
+
+			</div>
+		</form>
+
+		<div class="row">
+
+			<p class="msg"><strong>Name:</strong> Example of a message.</p>
+			<p class="msg"><strong>Abed:</strong> That’s the nicest thing anyone’s ever said to me.</p>
+			<p class="msg"><strong>Jeff:</strong> I see your value now.</p>
+			<p class="msg"><strong>Jeff:</strong> Holy crap. Abed.</p>
+			<p class="msg"><strong>Abed:</strong> Well, I only talked to her once while she was borrowing a pencil, but… her name is Britta, she’s twenty eight, birthday in October, she has two older brothers and one of them works with children who have a disorder I might wanna look up. Oh and she thinks she’s gonna flunk tomorrow’s test so she really needs to focus, so she’s sorry if that makes her seem cold.</p>
+			<p class="msg"><strong>Jeff:</strong> What’s the deal with the hot girl from Spanish class? I can’t find a road in there.</p>
+			<p class="msg"><strong>Abed:</strong> Yeah?</p>
+			<p class="msg"><strong>Jeff:</strong> Abed.</p>
+			<p class="msg"><strong>Abed:</strong> Five after eleven, when you asked.</p>
+			<p class="msg"><strong>Abed:</strong> Oh. Uh…</p>
+			<p class="msg"><strong>Jeff:</strong> Abed, uh, nice to know you, and then meet you, in that order. Now, about that question that I asked?</p>
+			<p class="msg"><strong>Abed:</strong> My name’s Abed, by the way.</p>
+			<p class="msg"><strong>Abed:</strong>  I’m only half-Arabic, actually. My dad is Palestinian. He’s a US citizen, he’s not a threat to national security or anything, a lot of people want to know that after they meet him because he has an angry energy, but not like angry at America, just angry at my mom for leaving him, although she did leave because he was angry because she’s American.</p>
+
+		</div>
+
+	</div>
+
+</div>
