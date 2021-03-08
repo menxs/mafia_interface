@@ -33,3 +33,11 @@ liveSocket.connect()
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
 
+let btnTheme = document.querySelector('#theme');
+
+btnTheme.addEventListener('click', toggleTheme);
+
+function toggleTheme() {
+	let root = document.querySelector(':root');
+	root.classList.toggle("light-mode");
+}

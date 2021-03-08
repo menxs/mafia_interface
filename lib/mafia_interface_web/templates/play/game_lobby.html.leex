@@ -1,4 +1,4 @@
-<%= if @name == nil do %>
+<%= if @my_name == nil do %>
 	<div class="row u-center">
 		
 		<form phx-submit="set_name">
@@ -14,7 +14,7 @@
 	<div class="row">
 
 		<div class="two-thirds column">
-			<h3><strong><%= @name %></strong></h3>
+			<h3><strong><%= @my_name %></strong></h3>
 		</div>
 
 		<div class="one-third column">
@@ -24,37 +24,47 @@
 	</div>
 <% end %>
 
+	<div class="row">
+		<div class="twelve columns u-center">
+			<h4>Game code: <strong><%= @game_id %></strong></h4>
+		</div>
+	</div>
+
 <div class="row">
 
 	<div class="one-third column">
 
-		<h5>Players:</h5>
-		<ul>
-			<%= for {name, _info} <- @players do%>
-				<li><%= name %></li>
-			<% end %>
-		</ul>
+		<div class="row">
+			<h5>Players:</h5>
+			<ul>
+				<%= for p <- @players do%>
+					<li><%= p.name %></li>
+				<% end %>
+			</ul>
+		</div>
 
 	</div>
 
 	<div class="two-thirds column">
+		<%= if @my_name != nil do %>
+			<form <%# phx-submit="send_msg" #%>>
+				<div class="row shaded">
 
-		<form phx-submit="set_name">
-			<div class="row shaded">
+					<div class="nine columns">
+						<span class="textarea" role="textbox" name="content" contenteditable></span>
+					</div>
+					<div class="three columns">
+						<input class="u-pull-right u-no-margin" type="submit" value="Send"/>
+					</div>
 
-				<div class="nine columns">
-					<span class="textarea" role="textbox" name="msg" contenteditable></span>
 				</div>
-
-				<div class="three columns">
-					<input class="u-pull-right u-no-margin" type="submit" value="Send"/>
-				</div>
-
-			</div>
-		</form>
+			</form>
+		<% end %>
 
 		<div class="row">
-
+			<%= for {author, content} <- @messages do %>
+				<%= msg(author, content)%>
+			<% end %>
 			<p class="msg"><strong>Name:</strong> Example of a message.</p>
 			<p class="msg"><strong>Abed:</strong> That’s the nicest thing anyone’s ever said to me.</p>
 			<p class="msg"><strong>Jeff:</strong> I see your value now.</p>

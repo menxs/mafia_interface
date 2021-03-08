@@ -19,6 +19,7 @@ defmodule MafiaInterfaceWeb.Router do
 
     live "/", PageLive, :index
     live "/play", Play
+    live "/play/:game_id", Play
   end
 
   # Other scopes may use custom stacks.

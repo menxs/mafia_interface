@@ -1,0 +1,19 @@
+<div class="row u-center">
+	<button class="button-primary" style="width: 11rem" phx-click=matchmaker_play>Play</button>
+	<div class="break"/>
+</div>
+
+<div class="row u-center">
+	<button class="button-primary" style="width: 11rem" phx-click=matchmaker_create>Create</button>
+	<div class="break"/>
+</div>
+
+<form phx-submit="matchmaker_join">
+	<div class="row u-center">
+		<input type="text" class="code-input u-center" style="width: 11rem" name="game_id" placeholder="Code">
+	</div>
+	<div class="row u-center">
+		<input type="submit" class="button-primary" style="width: 11rem" value="Join">
+	</div>
+</form>
+

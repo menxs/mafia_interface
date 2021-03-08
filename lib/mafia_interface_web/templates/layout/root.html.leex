@@ -41,6 +41,7 @@
     <%= @inner_content %>
     <footer>
       <hr>
+      <button id="theme">Change Theme</button>
       <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
         <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home)%>
       <% end %>

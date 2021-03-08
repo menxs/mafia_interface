@@ -1,146 +1,46 @@
 <div class="row">
-		<h3><strong><%= safe_phase(@state) %></strong></h3>
-</div>
-
-<div class="row">
-
-	<div class="player-card shaded">
-		<div class="row">
-			<div class="one-half column">
-				<h5><%= @name %></h6>
-			</div>
-		
-			<div class="one-half column u-right">
-				<h5 style="color: red;">Mafioso</h6>
-			</div>	
-		</div>
-		
-	</div>
-		<div class="player-card shaded">
-		<div class="row">
-			<div class="one-half column">
-				<h5><%= @name %></h6>
-			</div>
-		
-			<div class="one-half column u-right">
-				<h5 style="color: red;">Mafioso</h6>
-			</div>	
-		</div>
-		
-	</div>
-		<div class="player-card shaded">
-		<div class="row">
-			<div class="one-half column">
-				<h5><%= @name %></h6>
-			</div>
-		
-			<div class="one-half column u-right">
-				<h5 style="color: red;">Mafioso</h6>
-			</div>	
-		</div>
-		
-	</div>
-		<div class="player-card shaded">
-		<div class="row">
-			<div class="one-half column">
-				<h5><%= @name %></h6>
-			</div>
-		
-			<div class="one-half column u-right">
-				<h5 style="color: red;">Mafioso</h6>
-			</div>	
-		</div>
-		
-	</div>
-		<div class="player-card shaded">
-		<div class="row">
-			<div class="one-half column">
-				<h5><%= @name %></h6>
-			</div>
-		
-			<div class="one-half column u-right">
-				<h5 style="color: red;">Mafioso</h6>
-			</div>	
-		</div>
-		
-	</div>
-	
-</div>
-
-
-
-
-
-
-
-<div >
-<%= if @state == {:playing, :judgement} or @state == {:playing, :defense} do %>
-	 <h3>Judged player: <%= @accused %></h3>
-<% end %>
-<%= if @state == {:playing, :accusation} do %>
-	<h3>Required votes: <%= "#{@accusations.required}" %></h3>
-<% end %>
-<%= for {player, info} <- @players do %>
-	<div>
-		<ul>Player: <%= player %></ul>
-		<ul>State: <%= safe_alive(info.alive) %></ul>
-		<ul>Accuse: <%= accuse_button(player, @selected) %></ul>
-		<ul>Currently accusing: <%= Map.get(@accusations.ballots, player, "Nobody") %></ul>
-		<ul>Accused by:
-			<%= for {accuser, accused} <- @accusations.ballots do %>
-				<%= if accused == player do %>
-					<ul><%= accuser %></ul>
-				<% end %>
+	<div class="column">
+		<h3>
+			<strong><%= humanize(@phase) %></strong>
+			<%= case @phase do %>
+				<% :accusation -> %>
+					, required votes: <%= @accusations.required %>
+				<% :judgement -> %>
+					of <%= @accused %>
+				<% :defense -> %>
+					of <%= @accused %>
+				<% _ -> %>					
 			<% end %>
-		</ul>
-		<ul>Vote: <%= innocent_button(@selected) %> <%= guilty_button(@selected) %></ul>
-		<ul>Static select: <button phx-click="select" phx-value-target=<%= player %>>Select</button></ul>
-		<ul>Dynamic select: <%= select_button(player, @selected, @role, info) %></ul>
+		</h3>
 	</div>
-<% end %>
+	<div class="column u-pull-right">
+		<div class="box">
+            <%= parse_time(@timer) %>
+         </div>
+		<button class="button-primary" phx-click=next_phase>Next</button>
+	</div>
 </div>
 
+<%= if @phase == :judgement && @players[@my_name].alive && @accused != @my_name do %>
+	<div class="row u-center">
+		<%= innocent_button(@my_selection) %>
+		<%= guilty_button(@my_selection) %>
+	</div>
+<% end %>
 
-<div hidden>
-<%# If you are alive %>
-<%=if true do %>
-
-	<%#Guilty/Inno%>
-
-	<%= for {player, info} <- @players do %>
-
-		<%# If they are alive %>
-		<%= if info.alive do %>
-
-			<%=case {@state, @selected} do %>
-
-				<% {{:playing, :accusation}, selected} when selected == player -> %>
-					<button phx-click="withdraw">Withdraw <%= player %></button>
-
-				<% {{:playing, :accusation}, _} -> %>
-					<button phx-click="accuse" phx-value-accused=<%= player %>><%= player %></button>
-
-				<% {{:playing, :night}, selected} when selected == player -> %>
-					<button phx-click="unselect">Unselect <%= player %></button>
-
-				<% {{:playing, :night}, _} -> %>
-					<%= if selectable?(@role, info) do %>
-						<button phx-click="select" phx-value-target=<%= player %>><%= player %></button>
-					<% else %>
-						<button-like><%= player %></button-like>
-					<% end %>
-					
-				<% {{:playing, _}, _} -> %>
-					<button-like><%= player %></button-like>
-			<% end %>
-
-		<%# If they are dead%>
-		<% else %>
-			<button disabled><%= player %></button>
-		<% end %>
+<div class="row" id="your-tag">
+	<%= case MafiaEngine.Players.get(@players, @my_name) do %>
+		<% :none -> %>
+			Waiting for players information.
+		<% myself -> %>
+			<%=player_tag(@phase, myself, @my_selection,  myself, @accusations)%>
 	<% end %>
+</div>
 
-<%# If you are dead %>
-<% else %>
+
+<div class="row" id="players-tags">
+<%= for p <- sort_players(List.delete(@players, MafiaEngine.Players.get(@players, @my_name))) do %>
+	<%=player_tag(@phase, p, @my_selection, MafiaEngine.Players.get(@players, @my_name), @accusations)%>
 <% end %>
 </div>
+

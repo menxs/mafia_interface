@@ -12,9 +12,9 @@ defmodule MafiaInterface.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: MafiaInterface.PubSub},
       # Start the Endpoint (http/https)
-      MafiaInterfaceWeb.Endpoint
-      # Start a worker by calling: MafiaInterface.Worker.start_link(arg)
-      # {MafiaInterface.Worker, arg}
+      MafiaInterfaceWeb.Endpoint,
+      # Start a matchmaker by calling: MafiaInterface.Matchmaker.start_link()
+      MafiaInterface.Matchmaker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
