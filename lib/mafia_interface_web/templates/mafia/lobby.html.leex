@@ -1,0 +1,94 @@
+<div class="row">
+
+  <h1>Lobby</h1>
+  
+  <div class="row">
+    <button class="u-half-width" style="margin-right: 8%;" id="invite-button" phx-hook="InviteButton">
+    INVITE</button>
+    <button class="u-half-width" phx-click="ready"><%= if @ready[@my_name] do "✅" end %> Ready</button> 
+  </div>
+
+  <div class="row">
+
+    <div class="four columns">
+      <table class="u-full-width">
+
+        <thead>
+          <tr>
+            <th>Players</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%= for p <- @players do%>
+            <tr>
+              <td>
+                <%= if @ready[p.name] do "✅" end %> <%= p.name %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+      <%=if Enum.all?(@ready, fn {_, x} -> x end) do %>
+        <p>Starting...</p>
+      <% end %>
+    </div>
+
+    <div class="eight columns">
+      <table class="u-full-width table-selector" phx-update="ignore">
+          <thead>
+            <tr>
+              <th id="tab-chat" class="clickable tab selected-tab" phx-hook="TableTab">Chat</th>
+              <th id="tab-roles" class="clickable tab" phx-hook="TableTab">Roles</th>
+              <th id="tab-settings" class="clickable tab" phx-hook="TableTab">Settings</th>
+            </tr>
+          </thead>
+        </table>
+
+      <div id="table-chat" phx-hook="TableContent">
+        <form phx-submit="send_msg" style="padding-top: 12px">
+
+          <input type="text" style="width: 73%;" name="text" placeholder="Write a message" required autocomplete="off" />
+
+          <input type="submit" style="width: 25%; padding: 0; text-align: center;" value="send">
+
+        </form>
+        <div id="messages" style="text-align: left;" phx-update="prepend">
+          <%= for {author, content} <- @messages do %>
+            <div class="msg" id=<%= :erlang.unique_integer()%>> <strong><%=author%></strong>: <%=content%></div>
+          <% end %>
+        </div>
+      </div>
+
+      <table hidden class="u-full-width" id="table-roles" phx-hook="TableContent">
+        <%= for {role, amount} <- @settings.roles do %>
+              <tr>
+                <td><%= humanize(role) %></td>
+                <td class="clickable" phx-click="decrease_role" phx-value-role=<%= role %>>-</td>
+                <td><%= amount %></td>
+                <td class="clickable" phx-click="increase_role" phx-value-role=<%= role %>>+</td>
+              </tr>
+          <% end %>
+      </table>
+
+      <table hidden class="u-full-width" id="table-settings" phx-hook="TableContent">
+        <tbody>
+          <%= for {phase, timer} <- @settings.timer do %>
+            <%= if phase != :game_over do %>
+              <tr>
+                <td><%= humanize(phase) %></td>
+                <td class="clickable" phx-click="decrease_timer" phx-value-phase=<%= phase %>>-</td>
+                <td><%= parse_time(div(timer, 1000)) %></td>
+                <td class="clickable" phx-click="increase_timer" phx-value-phase=<%= phase %>>+</td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,111 +1,212 @@
+
+/* Table of contents of the custom changes to skeleton
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- Colors
+- Grid
+- Base Styles
+- Typography
+- Links
+- Buttons
+- Forms
+- Lists
+- Code
+- Tables
+- Spacing
+- Utilities
+- Custom Classes
+*/
+
+/* Color
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 :root {
-	--red-but-not-black: #332c2c;
-	--not-quite-greyple: #394044;
+  --white: #fff;
+  --black: #222;
+  --dirty-white-1: #777;
+  --grayish-1: #555;
+  --gray-1: #333;
+  --dirty-white-2: #ccc;
+  --grayish-2: #bbb;
+  --gray-2: #888; 
+  --palid: #D1D1D1;
+  --teal: #33C3F0;
+  --line: #E1E1E1;
 
-	--blurple: #7289DA;
-	--blurple-dark: #5e77d4;
-	--full-white: #FFFFFF;
-	--greyple: #99AAB5;
-	--dark-but-not-black: #2C2F33;
-	--not-quite-black: #23272A;
-	--actually-black: #000000;
-
-	--text-color: var(--full-white);
-
-	--primary-base: var(--not-quite-black);
-	--primary-contrast: var(--dark-but-not-black);
-	--primary-more-contrast: var(--not-quite-greyple);
-	--primary-even-more-contrast: var(--greyple);
-
-	--accent          : var(--blurple);
-	--accent-contrast : var(--blurple-dark);
-
-	--friendly          : var(--);
-
-	--hostile           : var(--red-but-not-black);
+  --text-color: var(--black);
+  --background-color: var(--white);
+  --primary-1: var(--grayish-1);
+  --primary-2: var(--gray-1);
+  --secondary-1: var(--grayish-2);
+  --secondary-2: var(--gray-2);
+  --third: var(--palid);
+  --detail: var(--line);
+  --accent: var(--teal); }
+@media (prefers-color-scheme: dark) { 
+  :root {
+  --text-color: var(--palid);
+  --background-color: var(--black);
+  --primary-1: var(--grayish-2);
+  --primary-2: var(--dirty-white-2);
+  --secondary-1: var(--grayish-1);
+  --secondary-2: var(--dirty-white-1);
+  --third: var(--gray-1);
+  --detail: var(--gray-1);
+  --accent: var(--teal); }
 }
 
-.light-mode {
+/* Grid
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-	--text-color: var(--actually-black);
-
-	--primary-base: var(--full-white);
-	--primary-contrast: var(--greyple);
-	--primary-more-contrast: var(--not-quite-greyple);
-	--primary-even-more-contrast: var(---dark-but-not-black);
-
-	--accent          : var(--blurple-dark);
-	--accent-contrast : var(--blurple);
-
-	--friendly: var(--);
-
-	--hostile: #9e8686;
-}
-
+/* Base Styles
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 body {
-	background-color: var(--primary-base); }
+  background-color: var(--background-color);
+  color: var(--text-color); }
 
-footer {
-	text-align: center; }
+/* Typography
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.code-input {
-	width: 6rem; }
+/* Links
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.textarea {
-  padding: 6px 10px;
-  display: block;
-  overflow: hidden;
-  resize: none; }
+/* Buttons
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.button,
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  color: var(--primary-1);
+  border-color: var(--secondary-1); }
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+input[type="button"]:hover,
+.button:focus,
+button:focus,
+input[type="submit"]:focus,
+input[type="reset"]:focus,
+input[type="button"]:focus {
+  color: var(--primary-2);
+  border-color: var(--secondary-2); }
 
-span:focus {
-  outline: 0; }
+/* Forms
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="text"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea,
+select {
+  background-color: var(--background-color);
+  border-color: var(--third); }
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent); }
 
-.textarea[contenteditable]:empty::before {
-  content: "Send a message";
-  color: grey; }
+/* Lists
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.shaded {
-	background-color: var(--primary-contrast);
-	border-radius: 4px; }
+/* Code
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.highlighted {
-	background-color: var(--accent);
-	border-radius: 4px; }
+/* Tables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+th,
+td {
+  border-bottom-color: var(--detail); }
 
-.red-shaded {
-	background-color: var(--hostile);
-	border-radius: 4px; }
+/* Spacing
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+form {
+  margin-bottom: 0rem; }
+p {
+  margin-bottom: 1rem; }
 
-.player-tag {
-	padding: 1rem;
-	padding-bottom: 0;
-	margin-bottom: 1rem;
-}
-.player-card {
-	display: inline-block;
-	height: 10rem;
-	width: 25%;
-	margin-right: 1.5rem;
-	margin-bottom: 1.5rem;
-	padding: 6px 10px; }
+/* Utilities
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.u-half-width {
+  width: 45%; }
+.clickable {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */}
+.clickable:hover {
+  cursor: pointer; }
 
-.box{
-  display: inline-block;
-  height: 38px;
-  padding: 0 30px;
-  color: var(full-white);
+/* Misc
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+/* Custom Classes
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+main {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0 auto;
   text-align: center;
-  font-size: 11px;
-  font-weight: 600;
-  line-height: 38px;
-  letter-spacing: .1rem;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  box-sizing: border-box; }
+  margin-top: 5em;
+  width: 100%;
+  padding: 0 20px; }
 
-  div.break{
-  	margin-bottom: .5rem;
-  }
+@media (min-width: 400px) {
+  main {
+  width: 80%;
+  padding: 0; } }
+@media (min-width: 750px) {
+  main {
+  width: 60%; } }
+@media (min-width: 1000px) {
+  main {
+  width: 50%; } }
+
+table.table-selector {
+  margin-bottom: 0;
+  border-collapse: separate;
+}
+th.tab:first-child {
+  padding-left: 12px;}
+th.selected-tab {
+  border-radius: 4px 4px 0 0;
+  border: 1px solid var(--detail);
+  border-bottom: transparent; }
+.game-msg {
+  text-align: center;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: var(--detail); 
+  margin: .5em 0;}
+
+/* Media Queries
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+/*
+Note: The best way to structure the use of media queries is to create the queries
+near the relevant code. For example, if you wanted to change the styles for buttons
+on small devices, paste the mobile query code up in the buttons section and style it
+there.
+*/
+
+
+/* Larger than mobile */
+@media (min-width: 400px) {}
+
+/* Larger than phablet (also point when grid becomes active) */
+@media (min-width: 550px) {}
+
+/* Larger than tablet */
+@media (min-width: 750px) {}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {}

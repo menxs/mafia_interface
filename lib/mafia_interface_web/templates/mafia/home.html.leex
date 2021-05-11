@@ -1,0 +1,22 @@
+<div class="row" style="max-width: 300px; margin: auto;">
+
+	<h1>Mafia</h1>
+
+  <form phx-submit=<%= if @state == :join do "join" else "create" end%>>
+
+    <div class="row">
+      <input autofocus type="text" class="u-full-width" name="name" placeholder="Choose name" maxlength="10" required autocomplete="off" />
+    </div>
+
+    <div class="row">
+      <input type="submit" class="u-full-width"
+      value=<%= if @state == :join do "Join" else "Play" end%>>
+    </div>
+
+  </form>
+
+	<p>
+    Mafia is a social deduction game where the townsfolk try to figure out who are the mafioso before they kill them
+  </p>
+
+</div>

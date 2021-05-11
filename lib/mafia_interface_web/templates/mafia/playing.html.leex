@@ -1,0 +1,75 @@
+<div class="row">
+  <div id="refresh-alert" phx-hook="RefreshAlert"></div>
+
+  <h1><%= humanize(@phase) %></h1>
+
+  <p style="min-height: 3rem;">
+    <%= phase_description(@phase, assigns) %>
+  </p>
+
+  <div class="row">
+    <%= judgement_buttons(@phase, MafiaEngine.Players.get(@players, @my_name), @accused, @my_selection) %>
+  </div>
+
+  <div class="row">
+
+    <div class="one-half column">
+      <table class="u-full-width">
+
+        <thead>
+          <tr>
+            <th>Players</th>
+            <th>Role</th>
+            <th style="min-width: 5rem"><%= parse_time(@timer) %></th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <%= case MafiaEngine.Players.get(@players, @my_name) do %>
+            <% :none -> %>
+              <tr><th>Waiting for players information.</th></tr>
+            <% myself -> %>
+              <%=player_row(@phase, myself, @my_selection,  myself, @accusations)%>
+          <% end %>
+
+          <%= for p <- sort_players(List.delete(@players, MafiaEngine.Players.get(@players, @my_name))) do %>
+            <%=player_row(@phase, p, @my_selection, MafiaEngine.Players.get(@players, @my_name), @accusations)%>
+          <% end %>
+
+        </tbody>
+
+      </table>
+
+      <%# <button class="u-full-width" phx-click="next_phase">next</button> %>
+
+      <p class="clickable" style="text-decoration: underline;" phx-click="toggle_help">
+        Help
+      </p>
+
+      <%= if @show_help do content_tag(:p, game_help(MafiaEngine.Players.get(@players, @my_name))) end %>
+    </div>
+
+    <div class="one-half column">
+      <form phx-submit="send_msg" style="padding-top: 12px">
+
+        <input type="text" style="width: 70%;" name="text" placeholder="Write a message" required autocomplete="off" />
+
+        <input type="submit" style="width: 25%; padding: 0; text-align: center;" value="send">
+
+      </form>
+
+      <div id="messages" style="text-align: left;" phx-update="prepend">
+        <%= for {author, content} <- @messages do %>
+          <%= if author == :game_msg do %>
+            <div class="game-msg" id=<%= :erlang.unique_integer()%>> <%=content%> </div>
+          <% else %>
+            <div class="msg" id=<%= :erlang.unique_integer()%>> <strong><%=author%></strong>: <%=content%></div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+
+</div>

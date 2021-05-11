@@ -17,9 +17,9 @@ defmodule MafiaInterfaceWeb.Router do
   scope "/", MafiaInterfaceWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
-    live "/play", Play
-    live "/play/:game_id", Play
+    live "/", Mafia
+    live "/:game_id", Mafia
+
   end
 
   # Other scopes may use custom stacks.

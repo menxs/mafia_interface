@@ -37,6 +37,7 @@
   box-sizing: border-box; }
 .column,
 .columns {
+  width: 100%;
   float: left;
   box-sizing: border-box; }
 
@@ -124,7 +125,7 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: var(--text-color); }
+  color: #222; }
 
 
 /* Typography
@@ -157,9 +158,9 @@ p {
 /* Links
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 a {
-  color: var(--accent-contrast); }
+  color: #1EAEDB; }
 a:hover {
-  color: var(--accent); }
+  color: #0FA0CE; }
 
 
 /* Buttons
@@ -172,7 +173,7 @@ input[type="button"] {
   display: inline-block;
   height: 38px;
   padding: 0 30px;
-  color: var(full-white);
+  color: #555;
   text-align: center;
   font-size: 11px;
   font-weight: 600;
@@ -183,7 +184,7 @@ input[type="button"] {
   white-space: nowrap;
   background-color: transparent;
   border-radius: 4px;
-  border: 1px solid transparent;
+  border: 1px solid #bbb;
   cursor: pointer;
   box-sizing: border-box; }
 .button:hover,
@@ -196,18 +197,17 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-  color: var(--text-color);
-  background-color: transparent;   
-  border-color: transparent;
+  color: #333;
+  border-color: #888;
   outline: 0; }
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
-  color: var(--text-color);
-  background-color: var(--accent);
-  border-color: transparent; }
+  color: #FFF;
+  background-color: #33C3F0;
+  border-color: #33C3F0; }
 .button.button-primary:hover,
 button.button-primary:hover,
 input[type="submit"].button-primary:hover,
@@ -218,30 +218,9 @@ button.button-primary:focus,
 input[type="submit"].button-primary:focus,
 input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
-  color: var(--text-color);
-  background-color: var(--accent-contrast);
-  border-color: transparent; }
-.button.button-secondary,
-button.button-secondary,
-input[type="submit"].button-secondary,
-input[type="reset"].button-secondary,
-input[type="button"].button-secondary {
-  color: var(--text-color);
-  background-color: var(--primary-more-contrast);
-  border-color: transparent; }
-.button.button-secondary:hover,
-button.button-secondary:hover,
-input[type="submit"].button-secondary:hover,
-input[type="reset"].button-secondary:hover,
-input[type="button"].button-secondary:hover,
-.button.button-secondary:focus,
-button.button-secondary:focus,
-input[type="submit"].button-secondary:focus,
-input[type="reset"].button-secondary:focus,
-input[type="button"].button-secondary:focus {
-  color: var(--text-color);
-  background-color: var(--primary-contrast);
-  border-color: transparent; }
+  color: #FFF;
+  background-color: #1EAEDB;
+  border-color: #1EAEDB; }
 
 
 /* Forms
@@ -257,8 +236,8 @@ textarea,
 select {
   height: 38px;
   padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
-  background-color: var(--primary-contrast);
-  border: 1px solid transparent;
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
   border-radius: 4px;
   box-shadow: none;
   box-sizing: border-box; }
@@ -287,7 +266,7 @@ input[type="url"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid var(--accent);
+  border: 1px solid #33C3F0;
   outline: 0; }
 label,
 legend {
@@ -332,8 +311,8 @@ code {
   margin: 0 .2rem;
   font-size: 90%;
   white-space: nowrap;
-  background: var(--primary-more-contrast);
-  border: 1px solid var(--primary-contrast);
+  background: #F1F1F1;
+  border: 1px solid #E1E1E1;
   border-radius: 4px; }
 pre > code {
   display: block;
@@ -347,7 +326,7 @@ th,
 td {
   padding: 12px 15px;
   text-align: left;
-  border-bottom: 1px solid var(--primary-contrast); }
+  border-bottom: 1px solid #E1E1E1; }
 th:first-child,
 td:first-child {
   padding-left: 0; }
@@ -358,15 +337,13 @@ td:last-child {
 
 /* Spacing
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.box,
 button,
 .button {
   margin-bottom: 1rem; }
 input,
 textarea,
 select,
-fieldset,
-p.msg {
+fieldset {
   margin-bottom: 1.5rem; }
 pre,
 blockquote,
@@ -377,7 +354,7 @@ p,
 ul,
 ol,
 form {
-  margin-bottom: 2rem; }
+  margin-bottom: 2.5rem; }
 
 
 /* Utilities
@@ -392,14 +369,6 @@ form {
   float: right; }
 .u-pull-left {
   float: left; }
-.u-center {
-  text-align: center; }
-.u-left {
-  text-align: left; }
-.u-right {
-  text-align: right; }
-.u-no-margin {
-  margin: 0; }
 
 
 /* Misc
@@ -408,7 +377,7 @@ hr {
   margin-top: 3rem;
   margin-bottom: 3.5rem;
   border-width: 0;
-  border-top: 3px solid var(primary-more-contrast); }
+  border-top: 1px solid #E1E1E1; }
 
 
 /* Clearing
