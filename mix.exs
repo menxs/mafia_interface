@@ -45,7 +45,7 @@ defmodule MafiaInterface.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
-      {:mafia_engine, path: "../mafia_engine"}
+      {:mafia_engine, "~> 0.1.0"}
     ]
   end
 
