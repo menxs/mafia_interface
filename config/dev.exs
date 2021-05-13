@@ -9,7 +9,7 @@ use Mix.Config
 config :mafia_interface, MafiaInterfaceWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
-  code_reloader: false,
+  code_reloader: true,
   server: true,
   check_origin: false,
   watchers: [

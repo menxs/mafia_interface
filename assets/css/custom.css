@@ -173,12 +173,20 @@ table.table-selector {
   margin-bottom: 0;
   border-collapse: separate;
 }
-th.tab:first-child {
-  padding-left: 12px;}
+th:first-child,
+td:first-child {
+  padding-left: 1em;}
 th.selected-tab {
   border-radius: 4px 4px 0 0;
   border: 1px solid var(--detail);
   border-bottom: transparent; }
+.dead-player{
+  font-style: italic;
+  color: gray; }
+.selected-player{
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: var(--detail); }
 .game-msg {
   text-align: center;
   font-weight: bold;

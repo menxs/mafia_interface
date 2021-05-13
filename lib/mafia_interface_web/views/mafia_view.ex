@@ -58,11 +58,11 @@ defmodule MafiaInterfaceWeb.MafiaView do
 
   def player_style(%{name: name}, selected) when name == selected, do:
     ~E"""
-    style="font-weight: bold;"
+    class="selected-player"
     """
   def player_style(%{alive: false}, _selected), do:
     ~E"""
-    style="font-style: italic; color: gray;"
+    class="dead-player"
     """
   def player_style(_player, _selected), do:
     ~E"""
@@ -94,7 +94,7 @@ defmodule MafiaInterfaceWeb.MafiaView do
   def accuse_button(player, _selected) do
     if player.alive do
       ~E"""
-      <td class="clickable" phx-click=accuse phx-value-accused=<%= player.name %>>Accuse</td>
+      <td class="clickable" phx-click=accuse phx-value-accused="<%= player.name %>">Accuse</td>
       """
     else
       ~E"""
@@ -112,7 +112,7 @@ defmodule MafiaInterfaceWeb.MafiaView do
   def select_button(target, _selected, myself) do
     if selectable?(myself, target) do
       ~E"""
-      <td class="clickable" phx-click=select phx-value-target=<%= target.name %>><%= action(myself.role) %></td>
+      <td class="clickable" phx-click=select phx-value-target="<%=target.name%>"><%= action(myself.role) %></td>
       """
     else
       ~E"""

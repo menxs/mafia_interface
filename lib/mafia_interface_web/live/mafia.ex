@@ -128,7 +128,7 @@ defmodule MafiaInterfaceWeb.Mafia do
     ready = Map.update!(socket.assigns.ready, my_name, & not &1)
 
     if Enum.all?(ready, fn {_, x} -> x end), do:
-      Process.send_after(self(), :start_game, 5000)
+      Game.start_game(socket.assigns.game_id)
 
     Endpoint.broadcast_from(self(), topic(socket.assigns.game_id), "ready", my_name)
     {:noreply, assign(socket, :ready, ready)}
@@ -212,12 +212,6 @@ defmodule MafiaInterfaceWeb.Mafia do
   @impl true
   def handle_info({:game_update, update, data}, socket) do
     {:noreply, handle_update(update, data, socket)}
-  end
-
-  def handle_info(:start_game, socket) do
-    if Enum.all?(socket.assigns.ready, fn {_, x} -> x end), do:
-      Game.start_game(socket.assigns.game_id)
-    {:noreply, socket}
   end
 
   @impl true
@@ -334,7 +328,7 @@ defmodule MafiaInterfaceWeb.Mafia do
       players
       |> Enum.map(fn %{name: name} -> {name, false} end)
       |> Map.new()
-    Enum.reduce(r, ready_map, fn {name, x}, acc -> Map.replace(ready_map, name, x) end)
+    Enum.reduce(r, ready_map, fn {name, x}, acc -> Map.replace(acc, name, x) end)
   end
 
   defp topic(game_id), do: "game:#{game_id}"
