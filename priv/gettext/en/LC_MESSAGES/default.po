@@ -1,0 +1,27 @@
+## "msgid"s in this file come from POT (.pot) files.
+##
+## Do not add, change, or remove "msgid"s manually here as
+## they're tied to the ones in the corresponding POT file
+## (with the same domain).
+##
+## Use "mix gettext.extract --merge" or "mix gettext.merge"
+## to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2\n"
+
+#, elixir-format
+#: lib/mafia_interface_web/templates/mafia/home.html.leex:13
+msgid "Join"
+msgstr ""
+
+#, elixir-format
+#: lib/mafia_interface_web/templates/mafia/home.html.leex:13
+msgid "Play"
+msgstr ""
+
+#, elixir-format
+#: lib/mafia_interface_web/templates/mafia/home.html.leex:19
+msgid "Mafia is a social deduction game where the townsfolk try to figure out who are the mafioso before they kill them"
+msgstr ""
