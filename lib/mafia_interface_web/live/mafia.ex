@@ -1,4 +1,5 @@
 defmodule MafiaInterfaceWeb.Mafia do
+  @moduledoc false
   use MafiaInterfaceWeb, :live_view
 
   alias MafiaEngine.{Game, GameSupervisor, PubSub, Players, Player, Settings}
@@ -250,20 +251,19 @@ defmodule MafiaInterfaceWeb.Mafia do
           false <- Game.started?(game_id)
     do
       PubSub.sub_player(game_id, name, self())
-      with {:ok, players} <- Game.add_player(game_id, name)
-      do
+      case Game.add_player(game_id, name) do
+      {:ok, players} ->
         Endpoint.subscribe(topic(game_id))
         lobby_assigns(socket)
           |> assign(:players, players)
           |> assign(:ready, ready(%{}, players))
           |> assign(:my_name, name)
-      else
-        {:error, :name_already_taken} ->
-          PubSub.unsub_player(game_id, name)
-          put_flash(socket, :error, "Name already taken")
+      {:error, :name_already_taken} ->
+        PubSub.unsub_player(game_id, name)
+        put_flash(socket, :error, "Name already taken")
       end
     else
-      false -> push_patch(put_flash(socket, :error, "Game does not exist"),to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia))
+      false -> push_patch(put_flash(socket, :error, "Game does not exist"), to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia))
       true -> push_patch(put_flash(socket, :error, "Game is in progress"), to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia))
     end
   end
@@ -308,7 +308,7 @@ defmodule MafiaInterfaceWeb.Mafia do
     timer_end = Time.add(Time.utc_now(), data, :millisecond)
     socket
     |> assign(:timer_end, timer_end)
-    |> assign(:timer, div(data,1000))
+    |> assign(:timer, div(data, 1000))
   end
 
   defp handle_update(update, data, socket) do

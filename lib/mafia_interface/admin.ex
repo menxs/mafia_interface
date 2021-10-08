@@ -1,4 +1,6 @@
 defmodule MafiaInterface.Admin do
+  @moduledoc false
+  
   use GenServer
 
   alias MafiaEngine.GameSupervisor

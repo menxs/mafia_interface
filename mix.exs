@@ -33,6 +33,7 @@ defmodule MafiaInterface.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       {:phoenix, "~> 1.5.7"},
       {:phoenix_live_view, "~> 0.15.0"},
       {:floki, ">= 0.27.0", only: :test},
@@ -45,7 +46,7 @@ defmodule MafiaInterface.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:distillery, "~> 2.1"},
-      {:mafia_engine, "~> 0.1.0"}
+      {:mafia_engine, "~> 0.1.1"}
     ]
   end
 
