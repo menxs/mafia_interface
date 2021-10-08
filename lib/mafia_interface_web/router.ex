@@ -19,7 +19,6 @@ defmodule MafiaInterfaceWeb.Router do
 
     live "/", Mafia
     live "/:game_id", Mafia
-
   end
 
   # Other scopes may use custom stacks.

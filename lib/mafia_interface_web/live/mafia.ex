@@ -12,14 +12,13 @@ defmodule MafiaInterfaceWeb.Mafia do
 
   @impl true
   def handle_params(%{"game_id" => game_id}, _uri, socket) do
-    {:noreply, 
-      if Map.has_key?(socket.assigns, :my_name) do
-        join_game(game_id, socket.assigns.my_name, socket)
-      else
-        assign(socket, :state, :join)
-      end
-        |> assign(:game_id, game_id)
-    }
+    {:noreply,
+     if Map.has_key?(socket.assigns, :my_name) do
+       join_game(game_id, socket.assigns.my_name, socket)
+     else
+       assign(socket, :state, :join)
+     end
+     |> assign(:game_id, game_id)}
   end
 
   @impl true
@@ -30,33 +29,33 @@ defmodule MafiaInterfaceWeb.Mafia do
   # Render in function of state assign
 
   @impl true
-  def render(%{state: :create} = assigns), do:
-    MafiaView.render("home.html", assigns)
+  def render(%{state: :create} = assigns), do: MafiaView.render("home.html", assigns)
 
   @impl true
-  def render(%{state: :join} = assigns), do:
-    MafiaView.render("home.html", assigns)
+  def render(%{state: :join} = assigns), do: MafiaView.render("home.html", assigns)
 
   @impl true
-  def render(%{state: :lobby} = assigns), do:
-    MafiaView.render("lobby.html", assigns)
+  def render(%{state: :lobby} = assigns), do: MafiaView.render("lobby.html", assigns)
 
   @impl true
-  def render(%{state: :playing} = assigns), do:
-    MafiaView.render("playing.html", assigns)
+  def render(%{state: :playing} = assigns), do: MafiaView.render("playing.html", assigns)
 
   # Terminate
 
   @impl true
   def terminate(_reason, socket) do
     case socket.assigns.state do
-    :lobby ->
-      Game.remove_player(socket.assigns.game_id, socket.assigns.my_name)
-      PubSub.unsub(socket.assigns.game_id, self())
-    :playing ->
-      PubSub.unsub_player(socket.assigns.game_id, socket.assigns.my_name)
-    _ -> :ok
+      :lobby ->
+        Game.remove_player(socket.assigns.game_id, socket.assigns.my_name)
+        PubSub.unsub(socket.assigns.game_id, self())
+
+      :playing ->
+        PubSub.unsub_player(socket.assigns.game_id, socket.assigns.my_name)
+
+      _ ->
+        :ok
     end
+
     :ok
   end
 
@@ -64,7 +63,7 @@ defmodule MafiaInterfaceWeb.Mafia do
 
   @impl true
   def handle_event("join", %{"name" => name}, socket) do
-      {:noreply, join_game(socket.assigns.game_id, name, socket)}
+    {:noreply, join_game(socket.assigns.game_id, name, socket)}
   end
 
   @impl true
@@ -72,21 +71,30 @@ defmodule MafiaInterfaceWeb.Mafia do
     game_id = GameSupervisor.start_game()
     MafiaInterface.Admin.start(game_id)
     new_socket = assign(socket, :my_name, name)
-    {:noreply, push_patch(new_socket,
-      to: Routes.live_path(new_socket, MafiaInterfaceWeb.Mafia, game_id))}
+
+    {:noreply,
+     push_patch(new_socket,
+       to: Routes.live_path(new_socket, MafiaInterfaceWeb.Mafia, game_id)
+     )}
   end
 
   @impl true
   def handle_event("send_msg", %{"text" => text}, socket) do
     msg = {socket.assigns.my_name, text}
+
     {can_talk?, to} =
       if socket.assigns.state == :playing do
         Game.talk_to(socket.assigns.game_id, socket.assigns.my_name)
       else
         {true, :everyone}
       end
+
     if can_talk? do
-      Endpoint.broadcast_from(self(), topic(socket.assigns.game_id), "send_msg", %{msg: msg, to: to})
+      Endpoint.broadcast_from(self(), topic(socket.assigns.game_id), "send_msg", %{
+        msg: msg,
+        to: to
+      })
+
       {:noreply, assign(socket, :messages, [msg | socket.assigns.messages])}
     else
       {:noreply, socket}
@@ -126,10 +134,9 @@ defmodule MafiaInterfaceWeb.Mafia do
   @impl true
   def handle_event("ready", _values, socket) do
     my_name = socket.assigns.my_name
-    ready = Map.update!(socket.assigns.ready, my_name, & not &1)
+    ready = Map.update!(socket.assigns.ready, my_name, &(not &1))
 
-    if Enum.all?(ready, fn {_, x} -> x end), do:
-      Game.start_game(socket.assigns.game_id)
+    if Enum.all?(ready, fn {_, x} -> x end), do: Game.start_game(socket.assigns.game_id)
 
     Endpoint.broadcast_from(self(), topic(socket.assigns.game_id), "ready", my_name)
     {:noreply, assign(socket, :ready, ready)}
@@ -193,7 +200,7 @@ defmodule MafiaInterfaceWeb.Mafia do
   @impl true
   def handle_info(%{event: "send_msg", payload: %{msg: msg, to: to}}, socket) do
     if to == :everyone or to == Players.get(socket.assigns.players, socket.assigns.my_name).role do
-    {:noreply, assign(socket, :messages, [msg | socket.assigns.messages])}
+      {:noreply, assign(socket, :messages, [msg | socket.assigns.messages])}
     else
       {:noreply, socket}
     end
@@ -201,7 +208,7 @@ defmodule MafiaInterfaceWeb.Mafia do
 
   @impl true
   def handle_info(%{event: "ready", payload: name}, socket) do
-    ready = Map.update!(socket.assigns.ready, name, & not &1)
+    ready = Map.update!(socket.assigns.ready, name, &(not &1))
     {:noreply, assign(socket, :ready, ready)}
   end
 
@@ -218,74 +225,89 @@ defmodule MafiaInterfaceWeb.Mafia do
   @impl true
   def handle_info(:tick, socket) do
     timer = Time.diff(socket.assigns.timer_end, Time.utc_now())
-    if timer > 0, do:
-      Process.send_after(self(), :tick, 1000)
+    if timer > 0, do: Process.send_after(self(), :tick, 1000)
     {:noreply, assign(socket, :timer, timer)}
   end
 
-  def default_assigns(socket), do:
-    socket    
-    |> assign(:messages, [])
-    |> assign(:state, :create)
+  def default_assigns(socket),
+    do:
+      socket
+      |> assign(:messages, [])
+      |> assign(:state, :create)
 
-  def lobby_assigns(socket), do:
-    socket
-    |> assign(:players, [])
-    |> assign(:ready, %{})
-    |> assign(:settings, Settings.new())
-    |> assign(:state, :lobby) 
+  def lobby_assigns(socket),
+    do:
+      socket
+      |> assign(:players, [])
+      |> assign(:ready, %{})
+      |> assign(:settings, Settings.new())
+      |> assign(:state, :lobby)
 
-  def playing_assigns(socket), do:
-    socket
-    |> assign(:my_selection, nil)
-    |> assign(:accusations, MafiaEngine.Accusations.new(0))
-    |> assign(:accused, nil)
-    |> assign(:timer, 0)
-    |> assign(:show_help, false)
-    |> assign(:phase, :afternoon)
-    |> assign(:winner, :unknown)
-    |> assign(:state, :playing) 
+  def playing_assigns(socket),
+    do:
+      socket
+      |> assign(:my_selection, nil)
+      |> assign(:accusations, MafiaEngine.Accusations.new(0))
+      |> assign(:accused, nil)
+      |> assign(:timer, 0)
+      |> assign(:show_help, false)
+      |> assign(:phase, :afternoon)
+      |> assign(:winner, :unknown)
+      |> assign(:state, :playing)
 
   defp join_game(game_id, name, socket) do
     with true <- GameSupervisor.exists_id?(game_id),
-          false <- Game.started?(game_id)
-    do
+         false <- Game.started?(game_id) do
       PubSub.sub_player(game_id, name, self())
+
       case Game.add_player(game_id, name) do
-      {:ok, players} ->
-        Endpoint.subscribe(topic(game_id))
-        lobby_assigns(socket)
+        {:ok, players} ->
+          Endpoint.subscribe(topic(game_id))
+
+          lobby_assigns(socket)
           |> assign(:players, players)
           |> assign(:ready, ready(%{}, players))
           |> assign(:my_name, name)
-      {:error, :name_already_taken} ->
-        PubSub.unsub_player(game_id, name)
-        put_flash(socket, :error, "Name already taken")
+
+        {:error, :name_already_taken} ->
+          PubSub.unsub_player(game_id, name)
+          put_flash(socket, :error, "Name already taken")
       end
     else
-      false -> push_patch(put_flash(socket, :error, "Game does not exist"), to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia))
-      true -> push_patch(put_flash(socket, :error, "Game is in progress"), to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia))
+      false ->
+        push_patch(put_flash(socket, :error, "Game does not exist"),
+          to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia)
+        )
+
+      true ->
+        push_patch(put_flash(socket, :error, "Game is in progress"),
+          to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia)
+        )
     end
   end
 
   # When game ends redirect to the new lobby
-  defp handle_update(:state, :shutdown, socket), do:
-    push_patch(socket, to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia, socket.assigns.new_lobby))
+  defp handle_update(:state, :shutdown, socket),
+    do:
+      push_patch(socket,
+        to: Routes.live_path(socket, MafiaInterfaceWeb.Mafia, socket.assigns.new_lobby)
+      )
 
   # When the game starts initialize the assigns
-  defp handle_update(:state, :playing, socket), do:
-    playing_assigns(socket)
+  defp handle_update(:state, :playing, socket), do: playing_assigns(socket)
 
   # When phase changes reset selection
-  defp handle_update(:phase, data, socket), do:
-    socket
-    |> assign(:my_selection, nil)
-    |> assign(:messages, [{:game_msg, humanize(data)} | socket.assigns.messages])
-    |> assign(:phase, data)
+  defp handle_update(:phase, data, socket),
+    do:
+      socket
+      |> assign(:my_selection, nil)
+      |> assign(:messages, [{:game_msg, humanize(data)} | socket.assigns.messages])
+      |> assign(:phase, data)
 
   # With new players info keep the known role
   defp handle_update(:players, data, socket) do
     players = socket.assigns.players
+
     updated_players =
       data
       |> Enum.map(&keep_known_role(&1, players))
@@ -306,6 +328,7 @@ defmodule MafiaInterfaceWeb.Mafia do
   defp handle_update(:timer, data, socket) do
     Process.send_after(self(), :tick, 1000)
     timer_end = Time.add(Time.utc_now(), data, :millisecond)
+
     socket
     |> assign(:timer_end, timer_end)
     |> assign(:timer, div(data, 1000))
@@ -328,9 +351,9 @@ defmodule MafiaInterfaceWeb.Mafia do
       players
       |> Enum.map(fn %{name: name} -> {name, false} end)
       |> Map.new()
+
     Enum.reduce(r, ready_map, fn {name, x}, acc -> Map.replace(acc, name, x) end)
   end
 
   defp topic(game_id), do: "game:#{game_id}"
-
 end

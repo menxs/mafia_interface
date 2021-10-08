@@ -1,6 +1,6 @@
 defmodule MafiaInterface.Admin do
   @moduledoc false
-  
+
   use GenServer
 
   alias MafiaEngine.GameSupervisor
@@ -39,5 +39,4 @@ defmodule MafiaInterface.Admin do
   end
 
   defp topic(game_id), do: "game:#{game_id}"
-
 end
